@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
-  const [url, setUrl] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
+  const [url, setUrl] = useState<string>('');
+  const [imgUrl, setImgUrl] = useState<string>('');
 
   async function submit() {
     setLoading(true);
