@@ -4,7 +4,7 @@ import { useState } from 'react';
 const Index = () => {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
-  const [imgUrl, setImgUrl] = useState('/');
+  const [imgUrl, setImgUrl] = useState('');
 
   async function submit() {
     setLoading(true);
@@ -26,8 +26,15 @@ const Index = () => {
     <div>
       {loading && <h1>loading...</h1>}
       <div>
-        <img key={imgUrl} src={imgUrl} width={1280} height={720} alt={imgUrl} />
-
+        {imgUrl.length > 0 ? (
+          <img
+            key={imgUrl}
+            src={imgUrl}
+            width={1280}
+            height={720}
+            alt={imgUrl}
+          />
+        ) : null}
         <input
           type="text"
           placeholder="enter a website URL"
