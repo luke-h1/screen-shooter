@@ -6,26 +6,51 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "tsc": "tsc --noEmit -p tsconfig.json",
+    "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
+    "lint": "eslint \"./src/**/*.{js, jsx,ts,tsx}\" --quiet --fix && eslint \"./**/*.{js, jsx,ts,tsx}\" --quiet --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "test": "jest",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit",
+    "test:watch": "jest --watch",
+    "test:snapshot": "jest --updateSnapshot",
+    "deploy": "sh ./scripts/deploy.sh",
+    "postbuild": "next-sitemap",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "aws-sdk": "^2.973.0",
+    "chrome-aws-lambda": "^10.1.0",
     "next": "11.1.0",
+    "next-seo": "^4.26.0",
+    "puppeteer": "^10.2.0",
+    "puppeteer-core": "^10.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
+    "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",
     "@types/react": "^17.0.19",
     "@types/styled-components": "^5.1.12",
     "@types/testing-library__dom": "^7.5.0",
     "@types/testing-library__jest-dom": "^5.14.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "babel-jest": "^27.0.6",
     "cypress": "^8.3.0",
-    "eslint": "7.32.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-next": "11.1.0",
-    "husky": "^7.0.1",
+    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "gen-env-types": "^1.3.0",
+    "husky": "^6.0.0",
     "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
     "jest-resolve": "^27.0.6",
@@ -34,6 +59,64 @@
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
     "start-server-and-test": "^1.13.1",
+    "ts-jest": "^27.0.5",
     "typescript": "^4.3.5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "npm run lint"
+    ],
+    "*.{js,jsx,ts,tsx,css,scss,html}": [
+      "npm run format"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/*.(test).{js,jsx,ts,tsx}",
+      "<rootDir>/__tests__/**/*.(test).{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/test/cssTransform.js",
+      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/test/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+      "^@src/(.*)$": "<rootDir>/src/$1",
+      "^react$": "<rootDir>/node_modules/react"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "<rootDir>/node_modules/jest-watch-typeahead/filename.js",
+      "<rootDir>/node_modules/jest-watch-typeahead/testname.js"
+    ],
+    "resetMocks": true,
+    "snapshotSerializers": [
+      "jest-serializer-html"
+    ]
   }
 }
