@@ -83,15 +83,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         Expires: 120, // expires in 2 hours
       };
       const URL = S3.getSignedUrl('getObject', params);
-
+      res.status(200);
       res.json({
         status: 'ok',
-        data: URL,
+        url: URL,
       });
+      res.end();
     });
   } catch (error) {
     console.log(error);
-    return;
+    res.status(500);
+    res.end();
   } finally {
     if (browser !== null) {
       await browser.close();
