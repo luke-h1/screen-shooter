@@ -1,13 +1,15 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
 
 const Index = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const [url, setUrl] = useState<string>('');
   const [imgUrl, setImgUrl] = useState<string>('');
 
   async function submit() {
     setLoading(true);
+    setIsSubmitting(true);
     const res = await fetch('/api/getImage', {
       method: 'POST',
       headers: {
@@ -20,6 +22,7 @@ const Index = () => {
     const json = await res.json();
     setImgUrl(json.data);
     setLoading(false);
+    setIsSubmitting(false);
   }
 
   return (
@@ -41,7 +44,7 @@ const Index = () => {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
-        <button onClick={submit} type="submit">
+        <button onClick={submit} type="submit" disabled={isSubmitting}>
           Submit URL
         </button>
       </div>
