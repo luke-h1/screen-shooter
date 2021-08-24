@@ -17,7 +17,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "aws-sdk": "^2.974.0",
+    "aws-sdk": "^2.975.0",
     "axios": "^0.21.1",
     "chrome-aws-lambda": "^10.1.0",
     "formik": "^2.2.9",
