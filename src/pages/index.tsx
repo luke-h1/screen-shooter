@@ -13,19 +13,7 @@ const Index = () => {
   const [imgUrl, setImgUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  /*
-            {loading && <Spinner />}
-          <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
-            {!loading && imgUrl.length > 0 ? (
-              <img
-                style={{ objectFit: 'cover', maxWidth: '100%' }}
-                src={imgUrl}
-                alt={imgUrl}
-              />
-            ) : null}
-          </div>
 
-  */
   return (
     <>
       <CustomHead
