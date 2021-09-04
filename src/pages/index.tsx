@@ -13,7 +13,6 @@ const Index = () => {
   const [imgUrl, setImgUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-
   return (
     <>
       <CustomHead
