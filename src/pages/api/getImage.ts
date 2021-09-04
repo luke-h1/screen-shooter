@@ -31,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let params;
 
     params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: process.env.SNAPSHOT_AWS_BUCKET_NAME,
       Key: fileName,
       Body: imageBuffer,
     };
@@ -45,7 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
       }
       params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.SNAPSHOT_AWS_BUCKET_NAME,
         Key: fileName,
         Expires: 120, // expires in 2 hours
       };
