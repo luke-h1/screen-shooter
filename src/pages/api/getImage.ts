@@ -28,7 +28,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    await page.goto(url);
+    await page.goto(url, {
+      timeout: 15 * 1000,
+    });
 
     page.waitForEvent('domcontentloaded');
     const image = await page.screenshot({
@@ -63,6 +65,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         status: 'ok',
         url: URL,
       });
+      res.setHeader(
+        'Cache-Control',
+        's-maxage=31536000, stale-while-revalidate',
+      );
+      res.setHeader('Content-Type', 'image/png');
       res.end(image);
     });
   } catch (error) {
