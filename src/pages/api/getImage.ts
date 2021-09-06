@@ -30,6 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await page.goto(url);
 
+    page.waitForEvent('domcontentloaded');
     const image = await page.screenshot({
       type: 'png',
     });
@@ -62,7 +63,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         status: 'ok',
         url: URL,
       });
-      res.end();
+      res.end(image);
     });
   } catch (error) {
     console.log(error);
