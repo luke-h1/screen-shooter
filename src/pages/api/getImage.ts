@@ -16,13 +16,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const browser = await playwright.launchChromium();
+  const browser = await playwright.launchChromium({
+    headless: true,
+  });
 
   try {
     const page = await browser.newPage({
       viewport: {
-        width: 1200,
-        height: 630,
+        width: 1920,
+        height: 1080,
       },
     });
 
@@ -60,7 +62,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         status: 'ok',
         url: URL,
       });
-      res.end(image);
+      res.end();
     });
   } catch (error) {
     console.log(error);
