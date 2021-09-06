@@ -2,8 +2,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable global-require */
-import getBrowserInstance from '@src/utils/getBrowserInstance';
 import { S3 } from '@src/utils/S3';
+import * as playwright from 'playwright-aws-lambda';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,16 +16,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  let browser = null;
-  try {
-    browser = await getBrowserInstance();
+  const browser = await playwright.launchChromium();
 
-    const page = await browser.newPage();
+  try {
+    const page = await browser.newPage({
+      viewport: {
+        width: 1200,
+        height: 630,
+      },
+    });
 
     await page.goto(url);
 
-    const imageBuffer = await page.screenshot();
-
+    const image = await page.screenshot({
+      type: 'png',
+    });
     const fileName = `images/screen-snap-${`${Date.now()}.jpg`}`;
 
     let params;
@@ -33,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     params = {
       Bucket: process.env.SNAPSHOT_AWS_BUCKET_NAME,
       Key: fileName,
-      Body: imageBuffer,
+      Body: image,
     };
 
     S3.upload(params, (e: any) => {
@@ -55,7 +60,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         status: 'ok',
         url: URL,
       });
-      res.end();
+      res.end(image);
     });
   } catch (error) {
     console.log(error);
